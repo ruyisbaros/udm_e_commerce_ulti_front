@@ -1,11 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit";
 
-
-
+import adminUsersSlicer from "./adminUsersSlicer";
+import adminRolesSlicer from "./adminRolesSlicer";
 
 export const store = configureStore({
-    reducer: {
-       
-
-    }
-})
+  reducer: {
+    users: adminUsersSlicer,
+    rolesContext: adminRolesSlicer,
+  },
+});

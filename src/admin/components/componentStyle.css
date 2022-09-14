@@ -1,0 +1,19 @@
+.admin_create_box{
+    display: flex;
+    gap:30px;
+}
+
+.admin_create_field{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+   
+    
+}
+.admin_create_field p{
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+.admin_create_field small{
+    transform: translateY(3px);
+}
