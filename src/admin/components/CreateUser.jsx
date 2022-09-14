@@ -22,11 +22,12 @@ const CreateUser = () => {
     lastName: "",
     password: "",
     roles: [],
-    isEnabled: false,
+    isEnabled: null,
     photos: "",
   });
 
   const { roles } = newUser;
+  const { isEnabled } = newUser;
 
   const handleRole = (e) => {
     const { value, checked } = e.target;
@@ -34,6 +35,15 @@ const CreateUser = () => {
       setNewUser({ ...newUser, roles: [...roles, value] });
     } else {
       setNewUser({ ...newUser, roles: roles.filter((e) => e !== value) });
+    }
+  };
+
+  const handleEnabled = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setNewUser({ ...newUser, isEnabled: true });
+    } else {
+      setNewUser({ ...newUser, isEnabled: false });
     }
   };
 
@@ -157,7 +167,7 @@ const CreateUser = () => {
             </label>
             <div className="col-sm-8 mt-3">
               {rolesContext?.map((role) => (
-                <div className="admin_create_box">
+                <div key={role.roleName} className="admin_create_box">
                   <div>
                     <input
                       type="checkbox"
@@ -175,15 +185,28 @@ const CreateUser = () => {
               ))}
             </div>
           </div>
-
-          <div className="text-center">
-            <button className="btn btn-primary m-4" type="submit">
-              Create
-            </button>
-            <button className="btn btn-danger" type="button">
-              Cancel
-            </button>
+          <div className="form-group row">
+            <label className="col-sm-4 col-form-label" htmlFor="">
+              Enabled:
+            </label>
+            <div className="col-sm-8">
+              <input
+                defaultValue={true}
+                type="checkbox"
+                minLength={4}
+                onChange={handleEnabled}
+              />
+            </div>
           </div>
+        </div>
+
+        <div className="text-center">
+          <button className="btn btn-primary m-4" type="submit">
+            Create
+          </button>
+          <button className="btn btn-danger" type="button">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
