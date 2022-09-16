@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   users: [],
-  suggestions: [],
+  updateId: null,
+  willUpdate: false,
   result: 0,
   usersFetching: false,
   error: false,
@@ -26,6 +27,13 @@ const usersSlicer = createSlice({
       state.users = [...state.users, action.payload];
     },
 
+    getWillUpdateId: (state, action) => {
+      state.updateId = action.payload;
+    },
+    isUpdate: (state, action) => {
+      state.willUpdate = action.payload;
+    },
+
     usersFetchFail: (state, action) => {
       state.usersFetching = false;
       state.error = true;
@@ -43,6 +51,8 @@ export const {
   usersFetchFail,
   fetchSuggestions,
   addNewUser,
+  getWillUpdateId,
+  isUpdate,
 } = usersSlicer.actions;
 
 export default usersSlicer.reducer;

@@ -1,6 +1,6 @@
 import React from "react";
-import Categories from "../components/Categories";
-import Users from "../components/Users";
+import Categories from "../components/categoryComps/Categories";
+import Users from "../components/userComps/Users";
 
 const AdminHome = () => {
   return (

@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Categories from "./admin/components/Categories";
-import CreateUser from "./admin/components/CreateUser";
-import Users from "./admin/components/Users";
+import Categories from "./admin/components/categoryComps/Categories";
+import CreateOrUpdateUser from "./admin/components/userComps/CreateOrUpdateUser";
+import EditUser from "./admin/components/userComps/EditUser";
+import Users from "./admin/components/userComps/Users";
 import AdminHome from "./admin/pages/AdminHome";
 import ClientHome from "./client/pages/ClientHome";
 import Footer from "./componentsGen/Footer";
@@ -21,7 +22,8 @@ function App() {
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/users" element={<Users />} />
             <Route path="/categories" element={<Categories />} />
-            <Route path="/new_user" element={<CreateUser />} />
+            <Route path="/user_ops" element={<CreateOrUpdateUser />} />
+            <Route path="/update_user/:id" element={<EditUser />} />
           </Routes>
           <Footer />
         </div>

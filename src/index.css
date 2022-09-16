@@ -46,6 +46,22 @@ img {
   margin: auto;
 }
 
+.icon_white{
+  color:white;
+}
+.icon_silver{
+  color:silver;
+}
+.icon_green{
+  color:green;
+}
+.icon_red{
+  color:red;
+}
+.icon_dark{
+  color:gray;
+}
+
 /* Set Responsive */
 
 /* @media (max-width:768px) {
