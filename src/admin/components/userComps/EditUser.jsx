@@ -9,7 +9,7 @@ import loadingGif from "../../../utils/images/loading.gif";
 
 const EditUser = () => {
   const { id } = useParams();
-  console.log(id);
+  //console.log(id);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const EditUser = () => {
     lastName: "",
     password: "",
     roles: [],
-    isEnabled: null,
+    isEnabled: false,
     imageId: "",
     imageUrl: "",
   });
@@ -44,8 +44,8 @@ const EditUser = () => {
 
   const fetchUser = async () => {
     const { data } = await axios.get(`/api/v1/admin/users/get_user/${id}`);
-    console.log(data);
-    console.log("data dan: ", data.email);
+    /* console.log(data);
+    console.log("data dan: ", data.email); */
     setExistingEmail(data.email);
     setEditUser({
       ...editUser,
@@ -53,7 +53,7 @@ const EditUser = () => {
       firstName: data.firstName,
       lastName: data.lastName,
       password: "",
-      roles: [],
+      roles: data.roles.map((r) => r.roleName),
       isEnabled: data.enabled,
       imageId: data.profileImage.imageId,
       imageUrl: data.profileImage.imageUrl,
@@ -122,6 +122,7 @@ const EditUser = () => {
     const { data } = await axios.delete(
       `/api/v1/admin/images/delete/${selectedImageId}`
     );
+    setEditUser({ ...editUser, imageId: "" });
     console.log(data);
   };
 
@@ -300,6 +301,9 @@ const EditUser = () => {
                     <div>
                       <input
                         type="checkbox"
+                        checked={editUser.roles.find(
+                          (r) => r === role.roleName
+                        )}
                         value={role.roleName}
                         onChange={handleRole}
                       />
@@ -318,9 +322,11 @@ const EditUser = () => {
               </label>
               <div className="col-sm-8">
                 <input
-                  defaultValue={true}
+                  checked={editUser.isEnabled}
+                  name="isEnabled"
                   type="checkbox"
-                  minLength={4}
+                  //minLength={4}
+                  //value={editUser.isEnabled}
                   onChange={handleEnabled}
                 />
               </div>
@@ -366,8 +372,12 @@ const EditUser = () => {
           </div>
 
           <div className="text-center">
-            <button className="btn btn-primary m-4" type="submit">
-              Update
+            <button
+              disabled={editUser.imageId === ""}
+              className="btn btn-primary m-4"
+              type="submit"
+            >
+              {editUser.imageId === "" ? "select image" : "update"}
             </button>
             <button
               onClick={cancelOperation}

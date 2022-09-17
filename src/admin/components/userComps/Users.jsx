@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getWillUpdateId,
-  isUpdate,
-  usersFetchSuccess,
-} from "../../../redux/adminUsersSlicer";
+import { isUpdate, usersFetchSuccess } from "../../../redux/adminUsersSlicer";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -90,7 +86,7 @@ const Users = () => {
         </thead>
         <tbody>
           {users?.map((user) => (
-            <tr>
+            <tr key={user.id}>
               <td>{user.id}</td>
               {/* <td>{user.photo}</td> */}
               <td>
@@ -118,13 +114,7 @@ const Users = () => {
                 )}
               </td>
               <td className="text-center d-flex justify-content-around border-bottom-0">
-                <Link
-                  onClick={() => {
-                    dispatch(isUpdate(true));
-                    dispatch(getWillUpdateId(user.id));
-                  }}
-                  to="/user_ops"
-                >
+                <Link to={`/update_user/${user.id}`}>
                   <i className="fa-solid fa-pen-to-square icon_green"></i>
                 </Link>
 

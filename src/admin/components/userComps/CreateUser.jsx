@@ -12,13 +12,14 @@ import loadingGif from "../../../utils/images/loading.gif";
 
 import defaultImg from "../../../utils/images/default-user.png";
 
-const CreateOrUpdateUser = () => {
+const CreateUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { rolesContext } = useSelector((store) => store.rolesContext);
   const { updateId, willUpdate } = useSelector((store) => store.users);
   console.log(updateId, willUpdate);
+  const [isCreated, setIsCreated] = useState(false);
 
   const [newUser, setNewUser] = useState({
     email: "",
@@ -29,8 +30,6 @@ const CreateOrUpdateUser = () => {
     isEnabled: null,
     imageId: "",
   });
-
-  const [isCreated, setIsCreated] = useState(false);
 
   //Profile image settings start
   const [selectedFile, setSelectedFile] = useState("");
@@ -357,4 +356,4 @@ const CreateOrUpdateUser = () => {
   );
 };
 
-export default CreateOrUpdateUser;
+export default CreateUser;

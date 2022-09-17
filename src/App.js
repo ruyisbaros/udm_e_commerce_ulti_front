@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Categories from "./admin/components/categoryComps/Categories";
-import CreateOrUpdateUser from "./admin/components/userComps/CreateOrUpdateUser";
+import CreateUser from "./admin/components/userComps/CreateUser";
 import EditUser from "./admin/components/userComps/EditUser";
 import Users from "./admin/components/userComps/Users";
 import AdminHome from "./admin/pages/AdminHome";
@@ -22,7 +22,7 @@ function App() {
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/users" element={<Users />} />
             <Route path="/categories" element={<Categories />} />
-            <Route path="/user_ops" element={<CreateOrUpdateUser />} />
+            <Route path="/new_user" element={<CreateUser />} />
             <Route path="/update_user/:id" element={<EditUser />} />
           </Routes>
           <Footer />
