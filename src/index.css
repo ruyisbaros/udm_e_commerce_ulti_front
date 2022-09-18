@@ -7,6 +7,13 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+html {
+  scroll-behavior: smooth;
+}
+
+::--webkit-scrollbar {
+  display: none;
+}
 
 li {
   list-style-type: none;

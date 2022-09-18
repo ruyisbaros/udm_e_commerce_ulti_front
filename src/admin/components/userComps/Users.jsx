@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { isUpdate, usersFetchSuccess } from "../../../redux/adminUsersSlicer";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Users = () => {
   const { users } = useSelector((store) => store.users);
@@ -12,21 +14,35 @@ const Users = () => {
   const navigate = useNavigate();
 
   const [alert, setAlert] = useState(false);
-  const [isComfirm, setIsComfirm] = useState(false);
   const [deletedUserInfo, setDeletedUserInfo] = useState({
     id: null,
     firstName: "",
   });
 
+  //Pagination Sorting
+  const [totalPages, setTotalPages] = useState();
+  const [pageNumber, setpageNumber] = useState(1);
+  const [pageSize, setpageSize] = useState(5);
+  const [sortingValue, setsortingValue] = useState("asc");
+  const [pageEmpty, setPageEmpty] = useState(false);
+  const [isFirstPage, setIsFirstPage] = useState(false);
+  const [isLastPage, setIsLastPage] = useState(false);
+
   const fetchUsers = async () => {
-    const { data } = await axios.get("/api/v1/admin/users/all");
-    //console.log(data);
-    dispatch(usersFetchSuccess(data));
+    const { data } = await axios.get(
+      `/api/v1/admin/users/all?pageSize=${pageSize}&pageNo=${pageNumber}&sorting=${sortingValue}`
+    );
+    console.log(data);
+    setTotalPages(data.totalPages);
+    setPageEmpty(data.empty);
+    setIsFirstPage(data.first);
+    setIsLastPage(data.last);
+    dispatch(usersFetchSuccess(data.content));
   };
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [pageNumber, pageSize]);
 
   console.log(users);
 
@@ -127,6 +143,52 @@ const Users = () => {
           ))}
         </tbody>
       </table>
+      <div className="page_actions">
+        <div className="page_selections">
+          <label htmlFor="">Page Size:</label>
+          <input
+            defaultValue={null}
+            type="text"
+            onChange={(e) => setpageSize(e.target.value)}
+          />
+        </div>
+        <div className="the_pages">
+          <button
+            disabled={isFirstPage === true}
+            className="arrow_btn"
+            type="button"
+            onClick={() => setpageNumber(pageNumber - 1)}
+          >
+            <ArrowBackIosIcon />
+          </button>
+          <div className="page_numbers">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (val, index) => (
+                <div
+                  key={index}
+                  onClick={() => setpageNumber(index + 1)}
+                  className={
+                    pageNumber === index + 1
+                      ? "page_number active"
+                      : "page_number"
+                  }
+                >
+                  {index + 1}
+                </div>
+              )
+            )}
+          </div>
+          <button
+            disabled={isLastPage === true}
+            className="arrow_btn"
+            style={{ width: "50px" }}
+            type="button"
+            onClick={() => setpageNumber(pageNumber + 1)}
+          >
+            <ArrowForwardIosIcon />
+          </button>
+        </div>
+      </div>
       {alert && (
         <div className="warning_box-delete">
           <p>
