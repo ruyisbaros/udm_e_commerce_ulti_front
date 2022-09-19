@@ -17,6 +17,9 @@ const usersSlicer = createSlice({
     usersFetchStart: (state) => {
       state.usersFetching = true;
     },
+    usersFetchFinish: (state) => {
+      state.usersFetching = false;
+    },
 
     usersFetchSuccess: (state, action) => {
       state.usersFetching = false;
@@ -53,6 +56,7 @@ export const {
   addNewUser,
   getWillUpdateId,
   isUpdate,
+  usersFetchFinish,
 } = usersSlicer.actions;
 
 export default usersSlicer.reducer;

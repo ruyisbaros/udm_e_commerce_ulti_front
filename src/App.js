@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,11 +10,15 @@ import AdminHome from "./admin/pages/AdminHome";
 import ClientHome from "./client/pages/ClientHome";
 import Footer from "./componentsGen/Footer";
 import Navbar from "./componentsGen/Navbar";
+import Loading from "./componentsGen/notifies/Loading";
+import Notify from "./componentsGen/notifies/Notify";
 
 function App() {
+  const { usersFetching } = useSelector((store) => store.users);
   return (
     <BrowserRouter>
       <ToastContainer position="bottom-center" limit={1} />
+      {usersFetching && <Loading />}
       <div className="App">
         <div className="main">
           <Navbar />
