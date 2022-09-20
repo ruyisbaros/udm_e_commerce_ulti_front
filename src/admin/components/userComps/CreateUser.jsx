@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { fetchRoles } from "../../../redux/adminRolesSlicer";
 
-import "../componentStyle.css";
 import { addNewUser } from "../../../redux/adminUsersSlicer";
 import { toast } from "react-toastify";
 
@@ -183,7 +182,6 @@ const CreateUser = () => {
       <h2 className="text-center m-2">Create New User</h2>
 
       <form
-        style={{ maxWidth: "50vw", margin: "30px auto" }}
         className="border border-secondary rounded p-3"
         onSubmit={handleSubmit}
       >

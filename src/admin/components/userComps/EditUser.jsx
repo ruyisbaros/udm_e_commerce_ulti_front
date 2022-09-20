@@ -220,7 +220,6 @@ const EditUser = () => {
         </h2>
 
         <form
-          style={{ maxWidth: "50vw", margin: "30px auto" }}
           className="border border-secondary rounded p-3"
           onSubmit={handleSubmit}
         >

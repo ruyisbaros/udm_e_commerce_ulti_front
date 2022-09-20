@@ -13,8 +13,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
-import { CSVLink } from "react-csv";
-
 const Users = () => {
   const { users } = useSelector((store) => store.users);
 
@@ -88,27 +86,24 @@ const Users = () => {
       console.log(error);
     }
   };
-  const [csvData, setCsvData] = useState("");
-  const exportCsv = async () => {
-    const { data } = await axios.get("/api/v1/admin/users/export_csv");
-    console.log(data);
-    setCsvData(data);
-  };
 
   return (
     <div className="users_container">
       <h2>Manage Users</h2>
       <div>
         <Link to="/new_user">Create New User |</Link>
-        <a
-          onClick={exportCsv}
-          href="http://localhost:8080/api/v1/admin/users/export_csv"
-        >
+        <a href="http://localhost:8080/api/v1/admin/users/export_csv">
           {" "}
           Export to CSV |
         </a>
-        <a href=""> Export to Excell |</a>
-        <a href=""> Export to PDF </a>
+        <a href="http://localhost:8080/api/v1/admin/users/export_excel">
+          {" "}
+          Export to Excel |
+        </a>
+        <a href="http://localhost:8080/api/v1/admin/users/export_pdf">
+          {" "}
+          Export to PDF{" "}
+        </a>
       </div>
       <div className="search_actions">
         <p>Search By keyword:</p>
@@ -220,8 +215,8 @@ const Users = () => {
                   />
                 </td>
                 <td>{user.username}</td>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
+                <td className="table_responsive">{user.firstName}</td>
+                <td className="table_responsive">{user.lastName}</td>
                 <td>{user.roles?.map((role) => role.roleName + " ")}</td>
                 <td className="text-center">
                   {user.enabled ? (

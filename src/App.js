@@ -9,19 +9,21 @@ import Users from "./admin/components/userComps/Users";
 import AdminHome from "./admin/pages/AdminHome";
 import ClientHome from "./client/pages/ClientHome";
 import Footer from "./componentsGen/Footer";
-import Navbar from "./componentsGen/Navbar";
+import NavbarAdmin from "./componentsGen/NavbarAdmin";
+import NavbarGeneral from "./componentsGen/NavbarGeneral";
 import Loading from "./componentsGen/notifies/Loading";
 import Notify from "./componentsGen/notifies/Notify";
 
 function App() {
   const { usersFetching } = useSelector((store) => store.users);
+  const { token, currentUser } = useSelector((store) => store.currentUser);
   return (
     <BrowserRouter>
       <ToastContainer position="bottom-center" limit={1} />
       {usersFetching && <Loading />}
       <div className="App">
         <div className="main">
-          <Navbar />
+          {token ? <NavbarAdmin /> : <NavbarGeneral />}
           <Routes>
             <Route path="/" element={<ClientHome />} />
             <Route path="/admin" element={<AdminHome />} />
