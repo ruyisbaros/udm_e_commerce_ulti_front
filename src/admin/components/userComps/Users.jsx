@@ -12,8 +12,9 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import Avatar from "../../../utils/images/default-user.png";
 
-const Users = () => {
+const Users = ({ token }) => {
   const { users } = useSelector((store) => store.users);
 
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const Users = () => {
     firstName: "",
   });
 
+  console.log(localStorage.getItem("token"));
   //Pagination Sorting Filter
   const [keyword, setKeyword] = useState("");
   const [totalPages, setTotalPages] = useState();
@@ -39,8 +41,10 @@ const Users = () => {
 
   const fetchUsers = async () => {
     dispatch(usersFetchStart());
+
     const { data } = await axios.get(
-      `/api/v1/admin/users/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`
+      `/api/v1/admin/users/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     dispatch(usersFetchFinish());
     console.log(data);
@@ -210,7 +214,9 @@ const Users = () => {
                 <td>
                   <img
                     className="avatar"
-                    src={user.profileImage.imageUrl}
+                    src={
+                      user.profileImage ? user.profileImage.imageUrl : Avatar
+                    }
                     alt="photoname"
                   />
                 </td>

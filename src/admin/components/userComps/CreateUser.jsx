@@ -69,7 +69,7 @@ const CreateUser = () => {
     let formData = new FormData();
     formData.append("multipartFile", file);
 
-    const { data } = await axios.post("/api/v1/admin/images/upload", formData, {
+    const { data } = await axios.post("/api/v1/users/images/upload", formData, {
       headers: { "content-type": "multipart/form-data" },
     });
     setIsCreated(false);
@@ -81,7 +81,7 @@ const CreateUser = () => {
   const deleteImage = async () => {
     setSelectedFile("");
     const { data } = await axios.delete(
-      `/api/v1/admin/images/delete/${selectedImageId}`
+      `/api/v1/users/images/delete/${selectedImageId}`
     );
     console.log(data);
   };

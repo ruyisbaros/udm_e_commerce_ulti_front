@@ -53,6 +53,7 @@ const Login = () => {
         data.roles.map((r) => r.roleName)
       );
       localStorage.setItem("profileImage", data.profileImage.imageUrl);
+      localStorage.setItem("firstName", data.firstName);
       toast.success(`welcome ${localStorage.getItem("email")}`);
       navigate("/");
       window.location.reload();

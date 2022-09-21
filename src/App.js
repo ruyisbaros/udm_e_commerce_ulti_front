@@ -9,12 +9,13 @@ import CreateUser from "./admin/components/userComps/CreateUser";
 import EditUser from "./admin/components/userComps/EditUser";
 import Users from "./admin/components/userComps/Users";
 import AdminHome from "./admin/pages/AdminHome";
+import Home from "./admin/pages/Home";
 import Login from "./admin/pages/Login";
-import ClientHome from "./client/pages/ClientHome";
 import Footer from "./componentsGen/Footer";
 import NavbarAdmin from "./componentsGen/NavbarAdmin";
 import NavbarGeneral from "./componentsGen/NavbarGeneral";
 import Loading from "./componentsGen/notifies/Loading";
+import SingleUser from "./componentsGen/SingleUser";
 
 function App() {
   const { usersFetching } = useSelector((store) => store.users);
@@ -28,7 +29,7 @@ function App() {
     }
   }, []);
 
-  console.log(token);
+  //console.log(token);
 
   return (
     <BrowserRouter>
@@ -39,9 +40,10 @@ function App() {
         <div className="main">
           {token ? <NavbarAdmin /> : <NavbarGeneral />}
           <Routes>
-            <Route path="/" element={<ClientHome />} />
+            <Route path="/" element={<Home />} />
             <Route path="/admin" element={<AdminHome />} />
-            <Route path="/users" element={<Users />} />
+            <Route path="/users" element={<Users token={token} />} />
+            <Route path="/users/:email" element={<SingleUser />} />
             <Route path="/login" element={<Login />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/new_user" element={<CreateUser />} />

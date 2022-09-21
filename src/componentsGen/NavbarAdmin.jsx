@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../utils/images/ShopmeAdminSmall.png";
 import avatar from "../utils/images/default-user.png";
 
@@ -9,9 +9,10 @@ const Navbar = () => {
     (store) => store.currentUser
   ); */
   //console.log(currentUserEmail, currentUserImage);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
-  //const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     if (localStorage.getItem("email")) {
@@ -20,7 +21,12 @@ const Navbar = () => {
     if (localStorage.getItem("profileImage")) {
       setProfileImage(localStorage.getItem("profileImage"));
     }
+    if (localStorage.getItem("roles")) {
+      setRoles(localStorage.getItem("roles").split(","));
+    }
   }, []);
+
+  console.log(roles);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -28,8 +34,24 @@ const Navbar = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("roles");
     localStorage.removeItem("profileImage");
+    localStorage.removeItem("firstName");
+    navigate("");
     window.location.reload();
   };
+
+  /* const isInclude = (pattern, arr) => {
+    pattern.forEach((element) => {
+      if (arr.includes(element)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  };
+
+  console.log(isInclude(["Admin",])) */
+
+  console.log(roles.includes("Shipper"));
 
   return (
     <div>
@@ -54,56 +76,102 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="topNavBar">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/users" className="link_class nav-link">
-                Users
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/categories" className="link_class nav-link">
-                Categories
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/brands" className="link_class nav-link">
-                Brands
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/products" className="link_class nav-link">
-                Products
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/customers" className="link_class nav-link">
-                Customers
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/orders" className="link_class nav-link">
-                Orders
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/shippings" className="link_class nav-link">
-                Shippings
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/sales" className="link_class nav-link">
-                Sales Report
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/articles" className="link_class nav-link">
-                Articles
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/settings" className="link_class nav-link">
-                Settings
-              </Link>
-            </li>
+            {roles.includes("Admin") && (
+              <li className="nav-item">
+                <Link to="/users" className="link_class nav-link">
+                  Users
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Editor")) && (
+              <li className="nav-item">
+                <Link to="/categories" className="link_class nav-link">
+                  Categories
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Editor")) && (
+              <li className="nav-item">
+                <Link to="/brands" className="link_class nav-link">
+                  Brands
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") ||
+              roles.includes("Editor") ||
+              roles.includes("SalesPerson") ||
+              roles.includes("Shipper")) && (
+              <li className="nav-item">
+                <Link to="/products" className="link_class nav-link">
+                  Products
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Assistant")) && (
+              <li className="nav-item">
+                <Link to="/questions" className="link_class nav-link">
+                  Questions
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Assistant")) && (
+              <li className="nav-item">
+                <Link to="/reviews" className="link_class nav-link">
+                  Reviews
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("SalesPerson")) && (
+              <li className="nav-item">
+                <Link to="/customers" className="link_class nav-link">
+                  Customers
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") ||
+              roles.includes("SalesPerson") ||
+              roles.includes("Shipper")) && (
+              <li className="nav-item">
+                <Link to="/orders" className="link_class nav-link">
+                  Orders
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("SalesPerson")) && (
+              <li className="nav-item">
+                <Link to="/shippings" className="link_class nav-link">
+                  Shippings
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("SalesPerson")) && (
+              <li className="nav-item">
+                <Link to="/sales" className="link_class nav-link">
+                  Sales Reports
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Editor")) && (
+              <li className="nav-item">
+                <Link to="/articles" className="link_class nav-link">
+                  Articles
+                </Link>
+              </li>
+            )}
+            {(roles.includes("Admin") || roles.includes("Editor")) && (
+              <li className="nav-item">
+                <Link to="/menus" className="link_class nav-link">
+                  Menus
+                </Link>
+              </li>
+            )}
+            {roles.includes("Admin") && (
+              <li className="nav-item">
+                <Link to="/settings" className="link_class nav-link">
+                  Settings
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <ul className="logged_user_info">
