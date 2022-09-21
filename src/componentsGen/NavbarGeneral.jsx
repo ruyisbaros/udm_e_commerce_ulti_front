@@ -5,7 +5,7 @@ import Logo from "../utils/images/ShopmeAdminSmall.png";
 const NavbarGeneral = () => {
   return (
     <div className="nav_box">
-      <nav className="nav_custom d-flex navbar-expand-lg bg-dark navbar-dark align-items-center justify-content-between">
+      <nav className="nav_custom navbar d-flex navbar-expand-lg bg-dark navbar-dark align-items-center justify-content-between">
         <div>
           <Link className="link_class" to="">
             <img src={Logo} alt="Logo" />

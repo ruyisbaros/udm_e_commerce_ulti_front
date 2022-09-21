@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -7,20 +9,32 @@ import CreateUser from "./admin/components/userComps/CreateUser";
 import EditUser from "./admin/components/userComps/EditUser";
 import Users from "./admin/components/userComps/Users";
 import AdminHome from "./admin/pages/AdminHome";
+import Login from "./admin/pages/Login";
 import ClientHome from "./client/pages/ClientHome";
 import Footer from "./componentsGen/Footer";
 import NavbarAdmin from "./componentsGen/NavbarAdmin";
 import NavbarGeneral from "./componentsGen/NavbarGeneral";
 import Loading from "./componentsGen/notifies/Loading";
-import Notify from "./componentsGen/notifies/Notify";
 
 function App() {
   const { usersFetching } = useSelector((store) => store.users);
-  const { token, currentUser } = useSelector((store) => store.currentUser);
+  const { logging } = useSelector((store) => store.currentUser);
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
+
+  console.log(token);
+
   return (
     <BrowserRouter>
       <ToastContainer position="bottom-center" limit={1} />
       {usersFetching && <Loading />}
+      {logging && <Loading />}
       <div className="App">
         <div className="main">
           {token ? <NavbarAdmin /> : <NavbarGeneral />}
@@ -28,6 +42,7 @@ function App() {
             <Route path="/" element={<ClientHome />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/new_user" element={<CreateUser />} />
             <Route path="/update_user/:id" element={<EditUser />} />

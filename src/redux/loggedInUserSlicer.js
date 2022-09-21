@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentUser: "",
+  currentUserEmail: "",
+  currentUserImage: "",
   currentUserRoles: [],
   token: "",
   logging: false,
@@ -19,7 +20,9 @@ const currentUserSlicer = createSlice({
     },
     userLoggedSucces: (state, action) => {
       state.logging = false;
-      state.currentUser = action.payload.currentUser;
+      state.currentUserEmail = action.payload.email;
+      state.currentUserRoles = action.payload.roles.map((r) => r.roleName);
+      state.currentUserImage = action.payload.profileImage;
       state.token = action.payload.token;
     },
   },

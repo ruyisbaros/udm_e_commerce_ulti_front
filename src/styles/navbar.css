@@ -3,3 +3,27 @@
 padding-left: 20px;
 padding-right: 30px;
 }
+
+.logged_user_info{
+    display: flex;
+    align-items: center;
+}
+.logged_user_image{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.logged_user_email{
+    color: white;
+    margin-left: 10px;
+}
+
+.dropdown-menu{
+    margin-top: 20px;
+    margin-left: -100px;
+}
+
+.dropdown-item{
+    cursor: pointer;
+   
+}

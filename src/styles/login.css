@@ -1,0 +1,52 @@
+.users_login{
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.users_login form{
+    width: 30%;
+    height: 30%;
+    padding: 20px;
+    background: #ddd;
+    border-radius: 5px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+}
+
+.users_login form h2{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:20px
+}
+
+.users_login form input{
+    display: block;
+    margin: 10px auto;
+    outline: none;
+    padding:5px 10px;
+}
+.users_login form .btn{
+    display: block;
+    margin: 20px auto;
+}
+.users_login form .remember_me input[type=checkbox]{
+    display: block;
+    transform: scale(1.5);
+    
+}
+.users_login form .remember_me label{
+    transform: translateY(5px);
+    margin-right: -20px;
+    
+}
+.users_login form .remember_me{
+    width: 50%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

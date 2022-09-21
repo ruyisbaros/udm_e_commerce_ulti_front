@@ -50,6 +50,7 @@ img {
 .App .main {
   max-width: 80vw;
   width: 100%;
+  height: 100%;
   margin: auto;
 }
 
@@ -82,3 +83,4 @@ img {
  @import url("./styles/loading.css");
  @import url("./styles/componentStyle.css");
  @import url("./styles/navbar.css");
+ @import url("./styles/login.css");
