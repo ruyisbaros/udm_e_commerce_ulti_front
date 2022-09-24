@@ -11,7 +11,7 @@ import loadingGif from "../../../utils/images/loading.gif";
 
 import defaultImg from "../../../utils/images/default-user.png";
 
-const CreateUser = () => {
+const CreateUser = ({ token }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -70,7 +70,10 @@ const CreateUser = () => {
     formData.append("multipartFile", file);
 
     const { data } = await axios.post("/api/v1/users/images/upload", formData, {
-      headers: { "content-type": "multipart/form-data" },
+      headers: {
+        "content-type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
     });
     setIsCreated(false);
     console.log(data);
@@ -81,8 +84,10 @@ const CreateUser = () => {
   const deleteImage = async () => {
     setSelectedFile("");
     const { data } = await axios.delete(
-      `/api/v1/users/images/delete/${selectedImageId}`
+      `/api/v1/users/images/delete/${selectedImageId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
+    setNewUser({ ...newUser, imageId: "" });
     console.log(data);
   };
 
@@ -119,15 +124,20 @@ const CreateUser = () => {
     e.preventDefault();
 
     const isEmailUnique = await axios.get(
-      `/api/v1/admin/users/is_email_unique/${newUser.email}`
+      `/api/v1/admin/users/is_email_unique/${newUser.email}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     //console.log(isEmailUnique.data);
 
     if (!isEmailUnique.data) {
-      const { data } = await axios.post("/api/v1/admin/users/create_user", {
-        ...newUser,
-      });
+      const { data } = await axios.post(
+        "/api/v1/admin/users/create_user",
+        {
+          ...newUser,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       console.log(data);
       dispatch(addNewUser(data));
       toast.success("User has been created successufully..");

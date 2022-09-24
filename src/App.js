@@ -5,10 +5,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Categories from "./admin/components/categoryComps/Categories";
+import CreateCategory from "./admin/components/categoryComps/CreateCategory";
+import EditCategory from "./admin/components/categoryComps/EditCategory";
 import CreateUser from "./admin/components/userComps/CreateUser";
 import EditUser from "./admin/components/userComps/EditUser";
 import Users from "./admin/components/userComps/Users";
-import AdminHome from "./admin/pages/AdminHome";
 import Home from "./admin/pages/Home";
 import Login from "./admin/pages/Login";
 import Footer from "./componentsGen/Footer";
@@ -19,6 +20,7 @@ import SingleUser from "./componentsGen/SingleUser";
 
 function App() {
   const { usersFetching } = useSelector((store) => store.users);
+  const { categoriesFetching } = useSelector((store) => store.categories);
   const { logging } = useSelector((store) => store.currentUser);
 
   const [token, setToken] = useState("");
@@ -36,18 +38,29 @@ function App() {
       <ToastContainer position="bottom-center" limit={1} />
       {usersFetching && <Loading />}
       {logging && <Loading />}
+      {categoriesFetching && <Loading />}
       <div className="App">
         <div className="main">
           {token ? <NavbarAdmin /> : <NavbarGeneral />}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<AdminHome />} />
             <Route path="/users" element={<Users token={token} />} />
             <Route path="/users/:email" element={<SingleUser />} />
+            <Route path="/new_user" element={<CreateUser token={token} />} />
+            <Route
+              path="/update_user/:id"
+              element={<EditUser token={token} />}
+            />
             <Route path="/login" element={<Login />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/new_user" element={<CreateUser />} />
-            <Route path="/update_user/:id" element={<EditUser />} />
+            <Route path="/categories" element={<Categories token={token} />} />
+            <Route
+              path="/new_category"
+              element={<CreateCategory token={token} />}
+            />
+            <Route
+              path="/update_category/:id"
+              element={<EditCategory token={token} />}
+            />
           </Routes>
           <Footer />
         </div>

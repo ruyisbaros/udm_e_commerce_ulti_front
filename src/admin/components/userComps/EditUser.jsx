@@ -7,9 +7,9 @@ import { fetchRoles } from "../../../redux/adminRolesSlicer";
 import defaultImg from "../../../utils/images/default-user.png";
 import loadingGif from "../../../utils/images/loading.gif";
 
-const EditUser = () => {
+const EditUser = ({ token }) => {
   const { id } = useParams();
-  //console.log(id);
+  console.log(id);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,7 +17,9 @@ const EditUser = () => {
   const { rolesContext } = useSelector((store) => store.rolesContext);
   useEffect(() => {
     const getRoles = async () => {
-      const { data } = await axios.get("/api/v1/admin/users/get_roles");
+      const { data } = await axios.get("/api/v1/admin/users/get_roles", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       //console.log(data);
       dispatch(fetchRoles(data));
     };
@@ -43,7 +45,9 @@ const EditUser = () => {
   const [isCreated, setIsCreated] = useState(false);
 
   const fetchUser = async () => {
-    const { data } = await axios.get(`/api/v1/admin/users/get_user/${id}`);
+    const { data } = await axios.get(`/api/v1/admin/users/get_user/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     /* console.log(data);
     console.log("data dan: ", data.email); */
     setExistingEmail(data.email);
@@ -105,7 +109,10 @@ const EditUser = () => {
     formData.append("multipartFile", file);
 
     const { data } = await axios.post("/api/v1/users/images/upload", formData, {
-      headers: { "content-type": "multipart/form-data" },
+      headers: {
+        "content-type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
     });
     setIsCreated(false);
     console.log(data);
@@ -120,7 +127,8 @@ const EditUser = () => {
   const deleteImage = async () => {
     setSelectedFile("");
     const { data } = await axios.delete(
-      `/api/v1/users/images/delete/${selectedImageId}`
+      `/api/v1/users/images/delete/${selectedImageId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     setEditUser({ ...editUser, imageId: "" });
     console.log(data);
@@ -155,7 +163,8 @@ const EditUser = () => {
     let isEmailUnique = false;
     if (existingEmail !== editUser.email) {
       isEmailUnique = await axios.get(
-        `/api/v1/admin/users/is_email_unique/${editUser.email}`
+        `/api/v1/admin/users/is_email_unique/${editUser.email}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
     }
 
@@ -166,7 +175,8 @@ const EditUser = () => {
         `/api/v1/admin/users/update_user/${id}`,
         {
           ...editUser,
-        }
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       //console.log(data);
       toast.success("User has been updated successufully..");

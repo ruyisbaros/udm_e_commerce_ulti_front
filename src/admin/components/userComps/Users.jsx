@@ -26,7 +26,7 @@ const Users = ({ token }) => {
     firstName: "",
   });
 
-  console.log(localStorage.getItem("token"));
+  //console.log(localStorage.getItem("token"));
   //Pagination Sorting Filter
   const [keyword, setKeyword] = useState("");
   const [totalPages, setTotalPages] = useState();
@@ -42,22 +42,26 @@ const Users = ({ token }) => {
   const fetchUsers = async () => {
     dispatch(usersFetchStart());
 
-    const { data } = await axios.get(
-      `/api/v1/admin/users/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    dispatch(usersFetchFinish());
-    console.log(data);
-    setTotalPages(data.totalPages);
-    setPageEmpty(data.empty);
-    setIsFirstPage(data.first);
-    setIsLastPage(data.last);
-    dispatch(usersFetchSuccess(data.content));
+    try {
+      const { data } = await axios.get(
+        `/api/v1/admin/users/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      dispatch(usersFetchFinish());
+      console.log(data);
+      setTotalPages(data.totalPages);
+      setPageEmpty(data.empty);
+      setIsFirstPage(data.first);
+      setIsLastPage(data.last);
+      dispatch(usersFetchSuccess(data.content));
+    } catch (error) {
+      dispatch(usersFetchFinish());
+    }
   };
 
   useEffect(() => {
     fetchUsers();
-  }, [pageNumber, pageSize, sortDir, arrow, keyword]);
+  }, [pageNumber, pageSize, sortDir, arrow, keyword, token]);
 
   console.log(users);
 
@@ -70,7 +74,8 @@ const Users = ({ token }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `/api/v1/admin/users/delete_user/${deletedUserInfo.id}`
+        `/api/v1/admin/users/delete_user/${deletedUserInfo.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("User has been deleted successufully");
       window.location.reload();
@@ -83,7 +88,9 @@ const Users = ({ token }) => {
   const handleEnableDisable = async (id) => {
     try {
       dispatch(usersFetchStart());
-      await axios.put(`/api/v1/admin/users/user_enabled_disabled/${id}`);
+      await axios.put(`/api/v1/admin/users/user_enabled_disabled/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       dispatch(usersFetchFinish());
       window.location.reload();
     } catch (error) {

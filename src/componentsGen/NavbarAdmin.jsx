@@ -39,20 +39,6 @@ const Navbar = () => {
     window.location.reload();
   };
 
-  /* const isInclude = (pattern, arr) => {
-    pattern.forEach((element) => {
-      if (arr.includes(element)) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  };
-
-  console.log(isInclude(["Admin",])) */
-
-  console.log(roles.includes("Shipper"));
-
   return (
     <div>
       {/* <form
