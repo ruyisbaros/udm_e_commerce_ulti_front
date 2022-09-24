@@ -15,6 +15,15 @@ import axios from "axios";
 
 const Categories = ({ token }) => {
   const { categories } = useSelector((store) => store.categories);
+  /* console.log(categories);
+  const [rootCategories, setRootCategories] = useState(
+    categories.filter((cat) => cat.parent === null)
+  );
+  const [subCategories, setSubCategories] = useState(
+    categories.filter((cat) => cat.parent !== null)
+  );
+  console.log(rootCategories);
+  console.log(subCategories); */
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -143,7 +152,10 @@ const Categories = ({ token }) => {
                     alt="photoname"
                   />
                 </td>
-                <td>{category.name}</td>
+                <td>
+                  {category.name} - (parent:{" "}
+                  {category.parent ? category.parent.name : "main"})
+                </td>
                 <td className="table_responsive">{category.alias}</td>
 
                 <td className="text-center">

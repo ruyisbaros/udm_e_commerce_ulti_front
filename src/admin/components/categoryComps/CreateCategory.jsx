@@ -30,6 +30,7 @@ const CreateCategory = ({ token }) => {
     setNewCategory({ ...newCategory, [e.target.name]: e.target.value });
   };
   console.log(newCategory);
+  //For Form select options
   const fetchCategories = async () => {
     const { data } = await axios.get("/api/v1/categories/all_categories", {
       headers: {
