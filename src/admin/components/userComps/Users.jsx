@@ -88,13 +88,14 @@ const Users = ({ token }) => {
   const handleEnableDisable = async (id) => {
     try {
       dispatch(usersFetchStart());
-      await axios.put(`/api/v1/admin/users/user_enabled_disabled/${id}`, {
+      await axios.put(`/api/v1/admin/users/user_enabled_disabled/${id}`, null, {
         headers: { Authorization: `Bearer ${token}` },
       });
       dispatch(usersFetchFinish());
       window.location.reload();
     } catch (error) {
       console.log(error);
+      dispatch(usersFetchFinish());
     }
   };
 

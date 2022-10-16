@@ -7,7 +7,7 @@ import loadingGif from "../../../utils/images/loading.gif";
 import defaultImg from "../../../utils/images/image-thumbnail.png";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CreateCategory = ({ token }) => {
   //Profile image settings start
@@ -26,18 +26,26 @@ const CreateCategory = ({ token }) => {
     imageId: "",
     enabled: false,
   });
+  const [nameIsNotUnique, setNameIsNotUnique] = useState({
+    situation: false,
+    message: "",
+  });
+
   const handleInput = (e) => {
     setNewCategory({ ...newCategory, [e.target.name]: e.target.value });
   };
   console.log(newCategory);
   //For Form select options
   const fetchCategories = async () => {
-    const { data } = await axios.get("/api/v1/categories/all_categories", {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const { data } = await axios.get(
+      "/api/v1/company/categories/all_categories",
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     console.log(data);
     setCategories(data);
   };
@@ -63,23 +71,6 @@ const CreateCategory = ({ token }) => {
 
   const [selectedImageId, setSelectedImageId] = useState("");
 
-  //Images Upload
-  /*  let newImageIds = [];
-  let newImages = [];
-  const imageUpload = async (dt) => {
-    const { data } = await axios.post("api/v1/categories/images/upload", dt, {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    newImageIds.push(data.imageId);
-    newImages.push(data);
-    setUploadImagesIds([...uploadImagesIds, ...newImageIds]);
-    setUploadImages([...uploadImages, ...newImages]);
-    setNewCategory({ ...newCategory, imageIds: uploadImagesIds });
-  }; */
-
   const handleSelectFile = async (e) => {
     const file = e.target.files[0];
     setIsCreated(true);
@@ -100,7 +91,7 @@ const CreateCategory = ({ token }) => {
     setSelectedFile(file);
     //imageUpload(formData);
     const { data } = await axios.post(
-      "api/v1/categories/images/upload",
+      "/api/v1/company/categories/images/upload",
       formData,
       {
         headers: {
@@ -118,7 +109,7 @@ const CreateCategory = ({ token }) => {
   const deleteImage = async () => {
     setSelectedFile("");
     const { data } = await axios.delete(
-      `/api/v1/categories/images/delete/${selectedImageId}`,
+      `/api/v1/company/categories/images/delete/${selectedImageId}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     console.log(data);
@@ -128,23 +119,68 @@ const CreateCategory = ({ token }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const { data } = await axios.post(
-      "/api/v1/categories/create",
-      { ...newCategory },
+    const isNameUnique = await axios.get(
+      `/api/v1/company/categories/name_unique/${newCategory.name}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    toast.success("Category created successufully");
-    navigate("/categories");
+    const isAliasUnique = await axios.get(
+      `/api/v1/company/categories/name_unique/${newCategory.alias}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(isNameUnique.data);
+    console.log(isAliasUnique.data);
+
+    if (!isNameUnique.data && !isAliasUnique.data) {
+      const { data } = await axios.post(
+        "/api/v1/company/categories/create",
+        { ...newCategory },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      toast.success("Category created successufully");
+      navigate("/categories");
+    } else if (!isNameUnique.data && isAliasUnique.data) {
+      setNameIsNotUnique({
+        ...nameIsNotUnique,
+        situation: true,
+        message: `${newCategory.alias} is already exist`,
+      });
+    } else if (isNameUnique.data && !isAliasUnique.data) {
+      setNameIsNotUnique({
+        ...nameIsNotUnique,
+        situation: true,
+        message: `${newCategory.name} is already exist`,
+      });
+    } else if (isNameUnique.data && isAliasUnique.data) {
+      setNameIsNotUnique({
+        ...nameIsNotUnique,
+        situation: true,
+        message: `${newCategory.name} and ${newCategory.alias} are already exist`,
+      });
+    }
   };
 
   const cancelOperation = () => {
     navigate("/categories");
   };
 
+  const handleWarning = () => {
+    setNameIsNotUnique({
+      ...nameIsNotUnique,
+      situation: false,
+      message: "",
+    });
+
+    setNewCategory({ ...newCategory, name: "" });
+  };
+
   return (
-    <div className="create_category">
+    <div className="create_update_category">
       <h2 className="text-center m-4">Create New Category</h2>
       <form
         onSubmit={submitHandler}
@@ -212,6 +248,8 @@ const CreateCategory = ({ token }) => {
               <input
                 defaultValue={true}
                 type="checkbox"
+                name="enabled"
+                value={newCategory.enabled}
                 minLength={4}
                 //onChange={handleEnabled}
               />
@@ -267,6 +305,14 @@ const CreateCategory = ({ token }) => {
               Cancel
             </button>
           </div>
+          {nameIsNotUnique.situation && (
+            <div className="warning_box-unique">
+              <span onClick={handleWarning} className="close-btn">
+                &times;
+              </span>
+              <p>{nameIsNotUnique.message}</p>
+            </div>
+          )}
         </div>
       </form>
     </div>

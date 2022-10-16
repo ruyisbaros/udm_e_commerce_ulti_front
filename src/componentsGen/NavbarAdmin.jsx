@@ -5,10 +5,6 @@ import Logo from "../utils/images/ShopmeAdminSmall.png";
 import avatar from "../utils/images/default-user.png";
 
 const Navbar = () => {
-  /* const { currentUserEmail, currentUserImage } = useSelector(
-    (store) => store.currentUser
-  ); */
-  //console.log(currentUserEmail, currentUserImage);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -41,12 +37,6 @@ const Navbar = () => {
 
   return (
     <div>
-      {/* <form
-        action="logout"
-        method="post"
-        hidden={true}
-        name="logoutForm"
-      ></form> */}
       <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
         <Link className="link_class" to="">
           <img src={Logo} alt="Logo" />

@@ -29,9 +29,9 @@ const Categories = ({ token }) => {
   const navigate = useNavigate();
 
   const [alert, setAlert] = useState(false);
-  const [deletedUserInfo, setDeletedUserInfo] = useState({
+  const [deletedCategoryInfo, setDeletedCategoryInfo] = useState({
     id: null,
-    firstName: "",
+    name: "",
   });
 
   //console.log(localStorage.getItem("token"));
@@ -51,7 +51,7 @@ const Categories = ({ token }) => {
     dispatch(categoriesFetchFinish());
     try {
       const { data } = await axios.get(
-        `/api/v1/categories/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`,
+        `/api/v1/company/categories/all?pageSize=${pageSize}&pageNo=${pageNumber}&sortDir=${sortDir}&sortField=${sortField}&keyword=${keyword}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch(categoriesFetchFinish());
@@ -69,13 +69,18 @@ const Categories = ({ token }) => {
   const handleEnableDisable = async (id) => {
     try {
       dispatch(categoriesFetchStart());
-      await axios.put(`/api/v1/admin/users/user_enabled_disabled/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `/api/v1/company/categories/category_enabled_disabled/${id}`,
+        null,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       dispatch(categoriesFetchFinish());
       window.location.reload();
     } catch (error) {
       console.log(error);
+      dispatch(categoriesFetchFinish());
     }
   };
 
@@ -83,23 +88,39 @@ const Categories = ({ token }) => {
     fetchCategories();
   }, [pageNumber, pageSize, sortDir, arrow, keyword, token]);
 
-  const getDeleteCategoryInfo = () => {};
-  const handleDelete = () => {};
+  const getDeleteCategoryInfo = (id, name) => {
+    setAlert(true);
+    setDeletedCategoryInfo({ ...deletedCategoryInfo, id, name });
+  };
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `/api/v1/company/categories/delete/${deletedCategoryInfo.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Category deleted successufully");
+      window.location.reload();
+      setAlert(false);
+    } catch (error) {
+      console.log(error);
+      setAlert(false);
+    }
+  };
 
   return (
     <div className="categories_container">
       <h2>Manage Categories</h2>
       <div>
         <Link to="/new_category">Create New Category |</Link>
-        <a href="http://localhost:8080/api/v1/categories/export_csv">
+        <a href="http://localhost:8080/api/v1/company/categories/export_csv">
           {" "}
           Export to CSV |
         </a>
-        <a href="http://localhost:8080/api/v1/categories/export_excel">
+        <a href="http://localhost:8080/api/v1/company/categories/export_excel">
           {" "}
           Export to Excel |
         </a>
-        <a href="http://localhost:8080/api/v1/categories/export_pdf">
+        <a href="http://localhost:8080/api/v1/company/categories/export_pdf">
           {" "}
           Export to PDF{" "}
         </a>
@@ -238,8 +259,8 @@ const Categories = ({ token }) => {
       {alert && (
         <div className="warning_box-delete">
           <p>
-            Are you sure do you want to delete " {deletedUserInfo.firstName} "
-            with " {deletedUserInfo.id} " ID
+            Are you sure do you want to delete " {deletedCategoryInfo.firstName}{" "}
+            " with " {deletedCategoryInfo.id} " ID
           </p>
           <div className="text-center">
             <button
